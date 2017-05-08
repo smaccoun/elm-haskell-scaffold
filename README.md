@@ -1,18 +1,18 @@
-#The Ultimate Elm Haskell Stack Builder!
+# The Ultimate Elm Haskell Stack Builder!
 
 This stack is built on:
 
-####Front-End
+#### Front-End
 * [x] Elm (Front-End)
 * [ ] Yarn
 
-####Back-End
+#### Back-End
 * [x] Haskell
     * [x] Servant
     * [x] Opaleye
 * [x] Postgres (DB)
 
-####Ops
+#### Ops
 * [x] Docker
 * [ ] Shell for auto building entire stack
 * [ ] Elastic Beanstalk
