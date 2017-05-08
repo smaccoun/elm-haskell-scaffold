@@ -32,3 +32,6 @@ cabal.sandbox.config
 .#*
 *~
 *.dump-hi
+
+# intellij
+.idea
