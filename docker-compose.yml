@@ -1,0 +1,12 @@
+db:
+  build:
+    ./db
+  ports:
+   - "5432"
+api:
+  build: ./
+  stdin_open: true
+  ports:
+   - "80:8080"
+  links:
+   - db

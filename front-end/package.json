@@ -1,0 +1,37 @@
+{
+  "name": "wrapid-elm",
+  "version": "0.1.0",
+  "description": "Wrapid App in Elm",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --env dev",
+    "build": "webpack --env prod"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^6.7.2",
+    "chunk-manifest-webpack-plugin": "^1.0.0",
+    "clean-webpack-plugin": "^0.1.15",
+    "css-loader": "^0.26.1",
+    "elm-hot-loader": "^0.5.4",
+    "elm-webpack-loader": "^4.2.0",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "file-loader": "^0.10.0",
+    "html-webpack-plugin": "^2.28.0",
+    "postcss-loader": "^1.2.2",
+    "style-loader": "^0.13.1",
+    "webpack": "^2.2.1",
+    "webpack-chunk-hash": "^0.3.0",
+    "webpack-closure-compiler": "^2.1.3",
+    "webpack-dashboard": "^0.3.0",
+    "webpack-dev-server": "^2.3.0",
+    "webpack-merge": "^2.6.1"
+  },
+  "dependencies": {
+    "apollo-client": "^0.8.5",
+    "graphql": "^0.8.0",  
+    "graphql-tag": "^1.2.4",
+    "subscriptions-transport-ws": "^0.5.3"
+  }
+}
