@@ -35,3 +35,4 @@ cabal.sandbox.config
 
 # intellij
 .idea
+*.iml
