@@ -2,11 +2,17 @@
 
 **Note:** This repo will be well-maintained and used heavily. Contributors are always welcome!
 
+### Issue Tracker
+Please see:
+
+https://waffle.io/smaccoun/elm-haskell-scaffold
+
+
+### Stack
 This stack is built on:
 
 #### Front-End
-* [x] Elm (Front-End)
-* [ ] Yarn
+* [x] Elm
 
 #### Back-End
 * [x] Haskell
@@ -16,9 +22,10 @@ This stack is built on:
 
 #### Ops
 * [x] Docker
-* [ ] Shell for auto building entire stack
+* [ ] Shell for auto building entire stack (Shake?)
 * [ ] Elastic Beanstalk
 * [ ] CircleCI
+* [ ] Yarn
 
 #### Codegen
 * [ ] ([servant-elm](https://www.google.com)) ???
@@ -34,7 +41,7 @@ This stack is built on:
 Branches:
 
 * [x] base
-  * [ ] Oauth
+  * [ ] auth0
   * [ ] Mailchimp example
   * [ ] Image storage
 
