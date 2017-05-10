@@ -9,10 +9,15 @@ module Lib
 import qualified Network.Wai as Wai
 import qualified Network.Wai.Handler.Warp as Warp
 import qualified Network.Wai.Middleware.RequestLogger as MidRL
+import qualified Network.Wai.Middleware.AddHeaders as Mah
+import Debug.Trace (trace)
+import Network.HTTP.Types.Method
+import Network.Wai.Middleware.Cors
 import Servant ((:<|>)( .. ), (:>), (:~>))
 import qualified Servant as S
 import Control.Monad.Trans.Reader (runReaderT)
 import Control.Monad.Trans.Except (ExceptT)
+import Control.Monad.IO.Class (liftIO)
 import qualified Database.PostgreSQL.Simple as PGS
 import qualified Data.Pool as Pool
 import qualified System.Log.FastLogger as FL
@@ -73,12 +78,19 @@ makeMiddleware logger env = case env of
       Production -> MidRL.mkRequestLogger $ def { MidRL.destination = MidRL.Logger logger
                                                 , MidRL.outputFormat = MidRL.Apache MidRL.FromSocket
                                                 }
-      Development -> MidRL.mkRequestLogger $ def { MidRL.destination = MidRL.Logger logger }
+      Development ->
+          combineMiddleWare corsified
+        $ MidRL.mkRequestLogger
+        $ def { MidRL.destination = MidRL.Logger logger }
+
+combineMiddleWare :: Wai.Middleware -> IO Wai.Middleware -> IO Wai.Middleware
+combineMiddleWare first second =
+   fmap (. first) second
 
 startApp :: [String] -> IO ()
 startApp args = do
   port <- lookupEnvDefault "SERVANT_PORT" 8080
-  env <- lookupEnvDefault "SERVANT_ENV" Production
+  env <- lookupEnvDefault "SERVANT_ENV" Development
   logTo <- case listToMaybe args of
     Just filename -> return $ File filename
     Nothing -> lookupEnvDefault "SERVANT_LOG" STDOut
@@ -92,8 +104,37 @@ startApp args = do
 readerTToExcept :: Config -> AppM :~> ExceptT S.ServantErr IO
 readerTToExcept pool = S.Nat (\r -> runReaderT r pool)
 
+-- | @x-csrf-token@ allowance.
+-- The following header will be set: @Access-Control-Allow-Headers: x-csrf-token@.
+allowCsrf :: Wai.Middleware
+allowCsrf = Mah.addHeaders [("Access-Control-Allow-Headers", "x-csrf-token,authorization")]
+
+-- | CORS middleware configured with 'appCorsResourcePolicy'.
+corsified :: Wai.Middleware
+corsified = cors (const $ Just appCorsResourcePolicy)
+
+-- | Cors resource policy to be used with 'corsified' middleware.
+--
+-- This policy will set the following:
+--
+-- * RequestHeaders: @Content-Type@
+-- * MethodsAllowed: @OPTIONS, GET, PUT, POST@
+appCorsResourcePolicy :: CorsResourcePolicy
+appCorsResourcePolicy = CorsResourcePolicy {
+    corsOrigins        = Nothing
+  , corsMethods        = ["OPTIONS", "GET", "PUT", "POST"]
+  , corsRequestHeaders = ["Authorization", "Content-Type"]
+  , corsExposedHeaders = Nothing
+  , corsMaxAge         = Nothing
+  , corsVaryOrigin     = False
+  , corsRequireOrigin  = False
+  , corsIgnoreFailures = False
+}
+
+
 app :: Config -> Wai.Application
-app pool = S.serve api $ S.enter (readerTToExcept pool) server
+app pool = S.serve api
+          $ S.enter (readerTToExcept pool) server
 
 api :: S.Proxy API
 api = S.Proxy

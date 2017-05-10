@@ -24,6 +24,8 @@ library
                      , aeson
                      , servant-server == 0.8
                      , wai
+                     , wai-cors
+                     , http-types
                      , warp
                      , datetime
                      , opaleye
