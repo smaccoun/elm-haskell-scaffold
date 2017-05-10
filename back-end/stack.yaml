@@ -1,24 +1,32 @@
-flags: {}
-extra-package-dbs: []
+resolver: lts-8.12
+
 packages:
-- '.'
+  - '.'
+  
 extra-deps:
-- base-compat-0.9.1
-- bifunctors-5.2
-- bytestring-builder-0.10.8.1.0
-- conduit-extra-1.1.13.2
-- datetime-0.3.1
-- fast-logger-2.4.6
-- opaleye-0.5.0.0
-- postgresql-libpq-0.9.2.0
-- postgresql-simple-0.5.2.1
-- servant-0.8.1
-- servant-server-0.8
-- unix-time-0.3.7
-- vector-0.11.0.0
-- wai-3.0.3.0
-- wai-extra-3.0.17
-- wai-logger-2.3.0
+  - base-compat-0.9.1
+  - bifunctors-5.2
+  - bytestring-builder-0.10.8.1.0
+  - conduit-extra-1.1.13.2
+  - datetime-0.3.1
+  - fast-logger-2.4.6
+  - opaleye-0.5.0.0
+  - postgresql-libpq-0.9.2.0
+  - postgresql-simple-0.5.2.1
+  - unix-time-0.3.7
+  - vector-0.11.0.0
+  - wai-3.2.1.1
+  - wai-extra-3.0.17
+  - wai-logger-2.3.0
+  - base-orphans-0.5.4
+  - clock-0.7.2
+  - text-1.2.2.1
+  - http-api-data-0.3.5
+  - natural-transformation-0.4
+  - servant-swagger-1.1.2.1
+  - servant-client-0.9.1.1
+  - random-strings-0.1.1.0 
 
-resolver: lts-3.17
+flags: {}
 
+extra-package-dbs: []
