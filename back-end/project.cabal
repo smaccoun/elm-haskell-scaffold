@@ -22,7 +22,7 @@ library
                      , Queries.User
   build-depends:       base >= 4.7 && < 5
                      , aeson
-                     , servant-server == 0.8
+                     , servant-server >= 0.6.0
                      , wai
                      , wai-cors
                      , http-types
