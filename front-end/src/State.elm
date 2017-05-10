@@ -26,14 +26,26 @@ init location =
 initModel: Model
 initModel =
     { history = []
-    , currentViewState = Login (Login.initModel mdlModel)
+    , currentViewModel = Login (Login.initModel mdlModel)
     }
 
-switchView: ViewState -> Cmd Msg
-switchView viewState =
+performSwitchView: ViewState -> Cmd Msg
+performSwitchView viewState =
   Task.perform
     (always (ChangeView viewState))
     (Task.succeed ())
+
+updateModelView: ViewState -> Model -> Maybe (Cmd Msg) -> (Model, Cmd Msg)
+updateModelView newView model maybeCmd =
+  let
+    cmd =
+      Maybe.withDefault Cmd.none maybeCmd
+  in
+      case newView of
+          LoginView ->
+            ({model | currentViewModel = Login (Login.initModel mdlModel)}, cmd)
+          HomePageView ->
+            ({model | currentViewModel = HomePage}, cmd)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -43,9 +55,7 @@ update msg model =
         Mdl message_ ->
             (model, Cmd.none)
         ChangeView viewState ->
-          case viewState of
-            LoginView ->
-              ({model | currentViewState = Login (Login.initModel mdlModel)}, Cmd.none)
+          updateModelView viewState model Nothing
         LoginMsg logMsg curLogModel ->
           let
               (newLoginModel, loginMsg) =
@@ -55,12 +65,12 @@ update msg model =
               Login.Submit email password->
                 (model, loginUser email password |> Cmd.map ReceiveAuthentication)
               _ ->
-                ({model | currentViewState = Login newLoginModel}, Cmd.none)
+                ({model | currentViewModel = Login newLoginModel}, Cmd.none)
 
         ReceiveAuthentication response ->
           case Debug.log "response!: " response of
             Success token ->
-              (model, Cmd.none)
+              (model, performSwitchView HomePageView)
             _ ->
               (model, Cmd.none)
 

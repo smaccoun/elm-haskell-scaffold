@@ -9,15 +9,16 @@ import Client.Login.Login as Login exposing (Model)
 
 type alias Model =
     { history : List Nav.Location
-    , currentViewState : ViewModelState
+    , currentViewModel : ViewModel
     }
 
 
-type ViewModelState
+type ViewModel
     = Login Login.Model
+    | HomePage
 
 
-type ViewState = LoginView
+type ViewState = LoginView | HomePageView
 
 type Msg
     = UrlChange Nav.Location
