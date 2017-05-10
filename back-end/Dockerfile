@@ -1,7 +1,16 @@
-FROM haskell:8
+FROM kelecorix/stack-build-lumper:latest
+MAINTAINER sigrlami <sergey.bushnyak@sigrlami.eu>
 
-ADD .stack-work/dist/x86_64-osx/Cabal-1.22.4.0/build/project-exe /opt/project-exe
+# Copy everything to docker ecosystem
+WORKDIR /app/
+COPY ["./docker-entrypoint.sh","./LICENSE","./*.cabal","./stack.yaml", "./"]
+COPY ./app  ./app
+COPY ./src/ ./src
 
-CMD sleep 100000
+RUN stack build --no-docker
 
-EXPOSE 8080
+RUN chmod 775 /app/docker-entrypoint.sh
+
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
+
+CMD run
