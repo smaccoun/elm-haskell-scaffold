@@ -13,15 +13,13 @@ type alias Model =
 model: Model
 model = Model "meow"
 
-type Msg = ShowUploadPage | ShowFormFillerPage
+type Msg = ShowSomething
 
 update : Msg -> Model -> Model
 update msg model =
   case msg of
-    ShowUploadPage ->
-      {model | viewState = "Show Upload Page"}
-    ShowFormFillerPage ->
-      {model | viewState = "Show form filler page"}
+    ShowSomething ->
+      {model | viewState = "Something!"}
 
 view : Model -> Html Msg
 view model =
@@ -29,6 +27,6 @@ view model =
     ("display", "flex")
     ,("align-items", "center")
   ]]
-  [button [onClick ShowUploadPage] [text "Add Forms"]
+  [button [onClick ShowSomething] [text "Show Me Something"]
   ,div [] [text model.viewState]
   ]

@@ -28,10 +28,5 @@
     "webpack-dev-server": "^2.3.0",
     "webpack-merge": "^2.6.1"
   },
-  "dependencies": {
-    "apollo-client": "^0.8.5",
-    "graphql": "^0.8.0",
-    "graphql-tag": "^1.2.4",
-    "subscriptions-transport-ws": "^0.5.3"
-  }
+  "dependencies": {}
 }

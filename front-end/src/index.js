@@ -3,8 +3,6 @@
 require('./main.css');
 const Elm = require('./Main.elm');
 
-import client from './gqlClient';
-
 console.log(process.env.NODE_ENV);
 
 const app = Elm.Main.fullscreen({
