@@ -6,8 +6,11 @@ import Types exposing (..)
 import Task exposing (perform)
 import RemoteData exposing (RemoteData(..))
 
-import Client.Login.Login as Login exposing (initModel)
 import Server.API.Queries.Authentication as Server exposing (loginUser)
+
+import Client.Login.Login as Login exposing (initModel)
+import Client.Pages.Home.Home as HomePage
+
 
 
 mdlModel : Material.Model
@@ -64,17 +67,23 @@ getPage hash =
         _ ->
           LoginView
 
-updateModelView: ViewState -> Model -> Maybe (Cmd Msg) -> (Model, Cmd Msg)
-updateModelView newView model maybeCmd =
+updateModelView: Model -> ViewModel -> Maybe (Cmd Msg) -> (Model, Cmd Msg)
+updateModelView model newViewModel maybeCmd =
   let
     cmd =
       Maybe.withDefault Cmd.none maybeCmd
   in
-      case newView of
-          LoginView ->
-            ({model | currentViewModel = Login (Login.initModel mdlModel)}, cmd)
-          HomePageView ->
-            ({model | currentViewModel = HomePage}, cmd)
+     ({model | currentViewModel = newViewModel}, cmd)
+
+
+getInitViewModel: ViewState -> ViewModel
+getInitViewModel viewState =
+  case viewState of
+    LoginView ->
+      Login (Login.initModel mdlModel)
+    HomePageView ->
+      HomePage HomePage.model
+
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -84,7 +93,7 @@ update msg model =
             viewState = getPage location.hash
             h = Debug.log "HASH!: " location.hash
           in
-            updateModelView viewState model Nothing
+            updateModelView model (getInitViewModel viewState) Nothing
         Mdl message_ ->
             (model, Cmd.none)
         ChangeView viewState maybeUrlChange ->
@@ -92,7 +101,15 @@ update msg model =
             Just url ->
               (model, Nav.newUrl url)
             Nothing ->
-              updateModelView viewState model Nothing
+              updateModelView model (getInitViewModel viewState) Nothing
+        ChildPageMsg childMsg ->
+          case childMsg of
+            HomePageMsg msg ->
+              let
+                updatedHomeModel =
+                  HomePage.update msg HomePage.model
+              in
+                updateModelView model (HomePage updatedHomeModel) Nothing
         LoginMsg logMsg curLogModel ->
           let
               (newLoginModel, loginMsg) =
@@ -112,6 +129,7 @@ update msg model =
               (model, performSwitchView HomePageView (Just "#home"))
             _ ->
               (model, Cmd.none)
+
 
 subscriptions: Model -> Sub Msg
 subscriptions model = Sub.none

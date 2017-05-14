@@ -14,5 +14,5 @@ view model =
   case model.currentViewModel of
     Login loginModel ->
       Html.map (\m -> LoginMsg m loginModel) (Login.view loginModel)
-    HomePage ->
-      HomePage.view
+    HomePage homeModel ->
+      Html.map (\m -> ChildPageMsg (HomePageMsg m)) (HomePage.view homeModel)

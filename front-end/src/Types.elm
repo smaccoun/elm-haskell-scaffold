@@ -5,6 +5,8 @@ import Navigation as Nav
 import RemoteData exposing (WebData)
 
 import Client.Login.Login as Login exposing (Model)
+import Client.Pages.Home.Home as HomePage exposing (Msg(..))
+
 
 type alias Flags =
   {nodeEnv: String
@@ -23,15 +25,18 @@ type alias Model =
 
 type ViewModel
     = Login Login.Model
-    | HomePage
+    | HomePage HomePage.Model
 
 
 type ViewState = LoginView | HomePageView
+
+type ChildPageMsgs = HomePageMsg HomePage.Msg
 
 type Msg
     = UrlChange Nav.Location
     | Mdl (Material.Msg Msg)
     | LoginMsg Login.Msg Login.Model
+    | ChildPageMsg ChildPageMsgs
     | ChangeView ViewState (Maybe String)
     | ReceiveAuthentication (RemoteData.WebData String)
 
