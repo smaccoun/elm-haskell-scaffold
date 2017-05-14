@@ -23,7 +23,7 @@ init flags location  =
     let
        z = Debug.log "Flags: " flags
     in
-        (initModel flags, Cmd.none)
+        (initModel flags, reactFirstUrl location)
 
 initModel: Flags -> Model
 initModel flags =
@@ -32,11 +32,41 @@ initModel flags =
     , currentViewModel = Login (Login.initModel mdlModel)
     }
 
-performSwitchView: ViewState -> Cmd Msg
-performSwitchView viewState =
+reactFirstUrl: Nav.Location -> Cmd Msg
+reactFirstUrl location =
+  let
+    intendedView =
+      getPage location.hash
+
+    isAuthenticated =
+      isAuthenticatedToView intendedView
+  in
+    if isAuthenticated then
+      performSwitchView intendedView Nothing
+    else
+      Cmd.none --Assumes that Login is the default view loaded in init
+
+
+--TODO: Should check for jwt and communicate with server to authenticate
+isAuthenticatedToView: ViewState -> Bool
+isAuthenticatedToView view =
+  True
+
+performSwitchView: ViewState -> Maybe String -> Cmd Msg
+performSwitchView viewState maybeUrlChange =
   Task.perform
-    (always (ChangeView viewState))
+    (always (ChangeView viewState maybeUrlChange))
     (Task.succeed ())
+
+getPage : String -> ViewState
+getPage hash =
+    case hash of
+        "#home" ->
+            HomePageView
+        "#login" ->
+            LoginView
+        _ ->
+          HomePageView
 
 updateModelView: ViewState -> Model -> Maybe (Cmd Msg) -> (Model, Cmd Msg)
 updateModelView newView model maybeCmd =
@@ -54,11 +84,19 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         UrlChange location ->
-          (model, Cmd.none)
+          let
+            viewState = getPage location.hash
+            h = Debug.log "HASH!: " location.hash
+          in
+            updateModelView viewState model Nothing
         Mdl message_ ->
             (model, Cmd.none)
-        ChangeView viewState ->
-          updateModelView viewState model Nothing
+        ChangeView viewState maybeUrlChange ->
+          case maybeUrlChange of
+            Just url ->
+              (model, Nav.newUrl url)
+            Nothing ->
+              updateModelView viewState model Nothing
         LoginMsg logMsg curLogModel ->
           let
               (newLoginModel, loginMsg) =
@@ -75,7 +113,7 @@ update msg model =
         ReceiveAuthentication response ->
           case Debug.log "response!: " response of
             Success token ->
-              (model, performSwitchView HomePageView)
+              (model, performSwitchView HomePageView (Just "#home"))
             _ ->
               (model, Cmd.none)
 

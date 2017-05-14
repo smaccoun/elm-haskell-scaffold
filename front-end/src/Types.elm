@@ -32,7 +32,7 @@ type Msg
     = UrlChange Nav.Location
     | Mdl (Material.Msg Msg)
     | LoginMsg Login.Msg Login.Model
-    | ChangeView ViewState
+    | ChangeView ViewState (Maybe String)
     | ReceiveAuthentication (RemoteData.WebData String)
 
 
