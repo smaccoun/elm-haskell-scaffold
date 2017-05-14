@@ -3,12 +3,8 @@ module State exposing (..)
 import Material
 import Navigation as Nav
 import Types exposing (..)
-import Time exposing (Time, hour)
-import Date exposing (Date, fromTime)
-import Date.Extra.Compare as CompareDate exposing (Compare2(..))
 import Task exposing (perform)
 import RemoteData exposing (RemoteData(..))
-import Tuple exposing (first)
 
 import Client.Login.Login as Login exposing (initModel)
 import Server.API.Queries.Authentication as Server exposing (loginUser)
@@ -66,7 +62,7 @@ getPage hash =
         "#login" ->
             LoginView
         _ ->
-          HomePageView
+          LoginView
 
 updateModelView: ViewState -> Model -> Maybe (Cmd Msg) -> (Model, Cmd Msg)
 updateModelView newView model maybeCmd =
