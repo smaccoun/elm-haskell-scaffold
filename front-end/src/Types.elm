@@ -6,9 +6,17 @@ import RemoteData exposing (WebData)
 
 import Client.Login.Login as Login exposing (Model)
 
+type alias Flags =
+  {nodeEnv: String
+  ,apiBaseUrl: String
+  }
+
+type alias AppConfig =
+  {apiBaseUrl: String}
 
 type alias Model =
-    { history : List Nav.Location
+    { appConfig: AppConfig
+    , history : List Nav.Location
     , currentViewModel : ViewModel
     }
 

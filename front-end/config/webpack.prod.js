@@ -66,7 +66,11 @@ module.exports = function (config) {
       new ChunkManifestPlugin({
         filename: 'chunk-manifest.json',
         manifestVariable: 'webpackManifest'
-      })
+      }),
+      new webpack.EnvironmentPlugin({
+                    NODE_ENV: 'production', // use 'development' unless process.env.NODE_ENV is defined
+                    API_URL: 'http://api:80'
+                  })
     ]
   };
 };

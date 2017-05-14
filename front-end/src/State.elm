@@ -18,14 +18,17 @@ mdlModel : Material.Model
 mdlModel =
     Material.model
 
+init : Flags -> Nav.Location -> ( Model, Cmd Msg )
+init flags location  =
+    let
+       z = Debug.log "Flags: " flags
+    in
+        (initModel flags, Cmd.none)
 
-init : Nav.Location -> ( Model, Cmd Msg )
-init location =
-    (initModel, Cmd.none)
-
-initModel: Model
-initModel =
-    { history = []
+initModel: Flags -> Model
+initModel flags =
+    { appConfig = {apiBaseUrl=flags.apiBaseUrl}
+    , history = []
     , currentViewModel = Login (Login.initModel mdlModel)
     }
 
@@ -60,10 +63,12 @@ update msg model =
           let
               (newLoginModel, loginMsg) =
                 Login.update logMsg curLogModel
+
+              serverContext = {apiBaseUrl=model.appConfig.apiBaseUrl}
           in
             case logMsg of
               Login.Submit email password->
-                (model, loginUser email password |> Cmd.map ReceiveAuthentication)
+                (model, Server.loginUser serverContext email password |> Cmd.map ReceiveAuthentication)
               _ ->
                 ({model | currentViewModel = Login newLoginModel}, Cmd.none)
 

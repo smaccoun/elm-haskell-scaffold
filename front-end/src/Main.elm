@@ -6,11 +6,12 @@ import State exposing (..)
 import View exposing (..)
 
 
-main : Program Never Model Msg
+main : Program Flags Model Msg
 main =
-    Nav.program UrlChange
+    Nav.programWithFlags UrlChange
         { init = init
         , view = view
         , update = update
         , subscriptions = subscriptions
         }
+

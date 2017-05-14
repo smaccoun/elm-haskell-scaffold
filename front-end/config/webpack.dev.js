@@ -37,7 +37,11 @@ module.exports = function (config) {
 
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
-      new webpack.NamedModulesPlugin()
+      new webpack.NamedModulesPlugin(),
+      new webpack.EnvironmentPlugin({
+              NODE_ENV: 'development', // use 'development' unless process.env.NODE_ENV is defined
+              API_URL: 'http://localhost:8080'
+            })
     ]
   };
 };

@@ -3,15 +3,19 @@ module Server.Config.APIServer exposing (..)
 
 type ServerAPIPaths = Base | Login
 
-baseUrl = "http://localhost:8080"
+type alias Context =
+  {apiBaseUrl: String
 
-serverAPIPaths: ServerAPIPaths -> String
-serverAPIPaths paths =
+  }
+
+
+getServerAPIPaths: Context -> ServerAPIPaths -> String
+getServerAPIPaths context paths =
     case paths of
         Base ->
-           baseUrl
+           context.apiBaseUrl
         Login ->
-           baseUrl ++ "/users/login"
+           context.apiBaseUrl ++ "/users/login"
 
 
 
