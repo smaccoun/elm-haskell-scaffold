@@ -1,7 +1,7 @@
 {
-  "name": "wrapid-elm",
+  "name": "elm-haskell scaffold",
   "version": "0.1.0",
-  "description": "Wrapid App in Elm",
+  "description": "Elm front end",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --env dev",

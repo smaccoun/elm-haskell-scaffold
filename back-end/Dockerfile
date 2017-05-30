@@ -1,16 +1,23 @@
-FROM kelecorix/stack-build-lumper:latest
-MAINTAINER sigrlami <sergey.bushnyak@sigrlami.eu>
+FROM haskell:8
+
+# install database dependencies
+RUN ["apt-get", "update"]
+RUN ["apt-get", "-y", "install", "libpq-dev"]
 
 # Copy everything to docker ecosystem
 WORKDIR /app/
-COPY ["./docker-entrypoint.sh","./LICENSE","./*.cabal","./stack.yaml", "./"]
+COPY ["./docker-entrypoint.sh","./*.cabal","./stack.yaml", "./"]
 COPY ./app  ./app
 COPY ./src/ ./src
 
 RUN stack build --no-docker
 
-RUN chmod 775 /app/docker-entrypoint.sh
+CMD stack exec dara-exe
 
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
+EXPOSE 8080
 
-CMD run
+#RUN chmod 775 /app/docker-entrypoint.sh
+#
+#ENTRYPOINT ["/app/docker-entrypoint.sh"]
+#
+#CMD run

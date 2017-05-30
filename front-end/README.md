@@ -1,4 +1,3 @@
-# Wrapid Elm FrontEnd
 
 ## Requirements
 - Java
