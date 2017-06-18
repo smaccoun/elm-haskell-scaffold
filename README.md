@@ -1,6 +1,6 @@
 # The Ultimate Elm Haskell Stack Builder!
 
-**Note:** This repo will be well-maintained and used heavily. Contributors are always welcome!
+**Note:** ~~This repo will be well-maintained and used heavily.~~ (LOL) Contributors are always welcome!
 
 ### Issue Tracker
 Please see:
